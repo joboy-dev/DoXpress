@@ -1,0 +1,24 @@
+{% extends 'constants/base-modal.html' %}
+
+{% block modal %}
+    <h1>Add Todo</h1>
+    <hr>
+
+    <form action="{{ url_for('add_todo') }}" method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.todo_name.label }}
+        {{ form.todo_name }}
+
+        {{ form.priority.label }}
+        {{ form.priority }}
+
+        {{ form.completion_date.label }}
+        {{ form.completion_date }}
+
+        {{ form.completion_time.label }}
+        {{ form.completion_time }}
+
+        <input type="submit" value="Add Todo">
+    </form>
+{% endblock %}

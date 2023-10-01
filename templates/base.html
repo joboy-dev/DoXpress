@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoXpress{% block pagetitle %}{% endblock %}</title>
+
+    <link rel="shortcut icon" href="static/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="static/css/base.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&family=Open+Sans:wght@400;700&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+
+    
+    {% block css_links %}{% endblock %}
+    {% block styles %}{% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="https://kit.fontawesome.com/e883737a77.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="logo">
+            <img src="static/images/logo.png" alt="logo">
+        </div>
+
+        <div class="nav-links">
+            <ul>
+                <li><a href="{{ url_for('home') }}" class="{% if active_link == 'home' %}active{% endif %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <p>@{{ user.username }}</p>
+                    <li><a href="{{ url_for('logout') }}" class="logout">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}" class="login {% if active_link == 'login' %}active{% endif %}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}" class="signup {% if active_link == 'signup' %}active{% endif %}">SIgnup</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% include 'constants/messages.html' %}
+    <div class="body {% if active_link != 'home' %}none{% endif %}">
+        {% block body %}{% endblock %}
+    </div>
+
+    {% block modal_container %}{% endblock %}
+
+    <!-- <script src="static/js/modal.js"></script> -->
+</body>
+</html>

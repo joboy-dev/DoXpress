@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="static/css/index/index.css">
+{% endblock %}
+
+{% block body %}
+    <div id="home-content">
+        {% if user.is_authenticated %}
+            <div class="heading">
+                <h1>Here are your todos</h1>
+                <a href="{{ url_for('add_todo') }}" class="btn">Add Todo</a>
+            </div>
+            <hr><br>
+
+            <div class="todos">
+                <div class="high priority">
+                    <h2>High Priority</h2>
+
+                    <div class="todo-items">
+                        <div class="todo-item">
+                            <p class="todo-name">Todo Name</p>
+                            <p class="due-date">Due Date</p>
+                            <div class="actions">
+                                <a href="#" class="edit">Edit</a>
+                                <a href="#" class="delete">Delete</a>
+                                <a href="#" class="complete">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="medium priority">
+                    <h2>Medium Priority</h2>
+
+                    <div class="todo-items">
+                        <div class="todo-item">
+                            <p class="todo-name">Todo Name</p>
+                            <p class="due-date">Due Date</p>
+                            <div class="actions">
+                                <a href="#" class="edit">Edit</a>
+                                <a href="#" class="delete">Delete</a>
+                                <a href="#" class="complete">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="low priority">
+                    <h2>Low Priority</h2>
+
+                    <div class="todo-items">
+                        <div class="todo-item">
+                            <p class="todo-name">Todo Nameeeeee eeeee eeeee eeee</p>
+                            <p class="due-date">Due Date</p>
+                            <div class="actions">
+                                <a href="#" class="edit">Edit</a>
+                                <a href="#" class="delete">Delete</a>
+                                <a href="#" class="complete">Complete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        {% else %}
+            <h1>Sign up or login to have access to this site</h1>
+
+            <div class="activities">
+                <p>Once you login or sign up, you'll have access to the following:</p>
+                <ul>
+                    <li>Creating a todo item.</li>
+                    <li>Editing and deleting of your todo items.</li>
+                    <li>Assigning your todos with a priority level to easily group them.</li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

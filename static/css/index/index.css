@@ -1,0 +1,147 @@
+.btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 15px 20px;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    box-shadow: 2px 2px 5px var(--secondary-color);
+    scale: 1.05;
+}
+
+#home-content {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+#home-content .heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 10%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.todos {
+    height: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    /* overflow-y: hidden; */
+}
+
+.todos .priority {
+    height: 100%;
+    width: 30%;
+    overflow-y: hidden;
+}
+
+.todos .priority .todo-items {
+    overflow-y: auto;
+    height: 95%;
+    padding: 0 10px;
+}
+
+.todos .priority .todo-items .completed {
+    background-color: rgba(134, 134, 134, 0.5);
+    border: 1px solid rgb(77, 77, 77);
+}
+
+.todos .priority .todo-item {
+    height:15%;
+    width: 100%;
+    margin: var(--default-ver-spacing) auto;
+    border-radius: 10px;
+    padding: var(--default-hor-spacing);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.todos .high .todo-item {
+    background-color: rgba(255, 65, 65, 0.1);
+    border: 1px solid rgba(255, 65, 65);
+}
+
+.todos .medium .todo-item {
+    background-color: rgba(240, 255, 30, 0.1);
+    border: 1px solid rgb(180, 190, 27);
+}
+
+.todos .low .todo-item {
+    background-color: rgba(63, 255, 137, 0.1);
+    border: 1px solid rgb(49, 158, 91);
+}
+
+.todo-item .todo-name {
+    font-weight: 900;
+    font-size: 0.55rem;
+}
+
+.todo-item .due-date {
+    font-weight: 500;
+    font-size: 0.45rem;
+    margin: 1%;
+}
+
+.todo-item .actions {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    margin: 3% 1%;
+    width: 100%;
+}
+
+.todo-item .actions a {
+    text-decoration: none;
+    font-size: 0.5rem;
+}
+
+.edit {
+    color: rgb(85, 90, 19);
+}
+
+.delete {
+    color: rgba(255, 65, 65);
+}
+
+.complete {
+    color: rgb(49, 179, 81);
+}
+
+.edit:hover, .delete:hover, .complete:hover {
+    font-weight: 700;
+    scale: 1.02;
+}
+
+
+/* UNAUTHENTICATED USERS */
+.activities {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width: 100%;
+    font-size: 0.7rem;
+}
+
+.activities p {
+    font-weight: 700;
+}
+
+.activities ul {
+    padding: 2% 10%;
+}
+
+.activities li {
+    padding: 2%;
+}

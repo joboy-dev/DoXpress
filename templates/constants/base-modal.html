@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block modal_container %}
+    <div id="modal" class="{% if active_link == 'home'%}none{% endif %}">
+        <div class="modal-container">
+            {% block modal %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

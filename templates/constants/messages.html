@@ -1,0 +1,16 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash-message {{category}}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<script>
+    var flashMessage = document.querySelector(".flash-message");
+    setTimeout(function(){
+        // set the style of the element to display nothing so it can disappear
+        // its like saying display:none in CSS
+        flashMessage.style.display = "none";
+    }, 7000);
+</script>
