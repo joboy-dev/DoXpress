@@ -28,6 +28,7 @@ class Todo(db.Model):
     completion_date = sa.Column(sa.Date, nullable=False)
     completion_time = sa.Column(sa.Time, nullable=False)
     is_complete = sa.Column(sa.Boolean, nullable=True, default=False)
+    expired = sa.Column(sa.Boolean, nullable=True, default=False)
     
     owner_id = sa.Column(sa.Integer, sa.ForeignKey(column='user.id', ondelete='CASCADE'), nullable=False)
     todo_owner = relationship('User', back_populates='todos')

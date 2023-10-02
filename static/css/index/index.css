@@ -59,6 +59,10 @@
     border: 1px solid rgb(77, 77, 77);
 }
 
+.todos .priority .todo-items .expired p {
+    text-decoration: line-through;
+}
+
 .todos .priority .todo-item {
     height:15%;
     width: 100%;
@@ -123,6 +127,12 @@
 
 .complete {
     color: rgb(49, 179, 81);
+}
+
+span.grayed-out{
+    font-size: 0.55rem;
+    text-decoration: none;
+    font-weight: 700;
 }
 
 .grayed-out {

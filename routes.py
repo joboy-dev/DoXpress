@@ -7,10 +7,29 @@ class HomeView(View):
     
     def dispatch_request(self):
         if current_user.is_authenticated:
-            high_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='High').order_by(Todo.completion_date).all()
-            medium_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Medium').order_by(Todo.completion_date).all()
-            low_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Low').order_by(Todo.completion_date).all()
+            high_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='High').order_by(Todo.expired, Todo.completion_date).all()
+            medium_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Medium').order_by(Todo.expired, Todo.completion_date).all()
+            low_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Low').order_by(Todo.expired, Todo.completion_date).all()
+            
+            now = datetime.now()
+            current_date=now.date()
+            current_time=now.time()
         
+            for high_todo in high_priority_todos:
+                if high_todo.completion_date <= current_date and high_todo.completion_time <= current_time:
+                    high_todo.expired=True
+                    session.commit()
+            
+            for medium_todo in medium_priority_todos:
+                if medium_todo.completion_date <= current_date and medium_todo.completion_time <= current_time:
+                    medium_todo.expired=True
+                    session.commit()
+                    
+            for low_todo in low_priority_todos:
+                if low_todo.completion_date <= current_date and low_todo.completion_time <= current_time:
+                    low_todo.expired=True
+                    session.commit()
+            
             return render_template('index.html', year=year, active_link='home', user=current_user, high_priority_todos=high_priority_todos, medium_priority_todos=medium_priority_todos, low_priority_todos=low_priority_todos)
         
         else:
@@ -160,25 +179,26 @@ class EditTodoView(View):
     def dispatch_request(self, id):
         todo_item = db.get_or_404(Todo, ident=id)
         
-        if todo_item.is_complete:
-            flash('Sorry, you cannot edit a completed todo.', category='error')
-            return redirect(url_for('home'))
-            
-        else:
-            form = EditTodoForm(obj=todo_item)
-            if form.validate_on_submit():
-                form.populate_obj(obj=todo_item)
-                
-                if todo_item.owner_id == current_user.id:
+        if todo_item.owner_id == current_user.id:
+            if todo_item.is_complete:
+                flash('Sorry, you cannot edit a completed todo.', category='error')
+                return redirect(url_for('home'))
+            elif todo_item.expired:
+                flash('Sorry, you cannot edit an expired todo.', category='error')
+                return redirect(url_for('home'))
+            else:
+                form = EditTodoForm(obj=todo_item)
+                if form.validate_on_submit():
+                    form.populate_obj(obj=todo_item)
                     session.commit()
                     flash('Todo updated.', category='success')
                     return redirect(url_for('home'))
-                else:
-                    return abort(code=401)
-            
-            return render_template('forms/edit-todo.html', active_link='edit_todo', user=current_user, form=form, todo=todo_item)
+                    
+                return render_template('forms/edit-todo.html', active_link='edit_todo', user=current_user, form=form, todo=todo_item)
+        else:
+            return abort(code=401)
 
-app.add_url_rule('/edit/<int:id>', view_func=EditTodoView.as_view(name='edit_todo'))
+app.add_url_rule('/<int:id>', view_func=EditTodoView.as_view(name='edit_todo'))
 
 
 class ChangeCompletedStatus(View):
@@ -193,6 +213,8 @@ class ChangeCompletedStatus(View):
         
             if todo_item.is_complete:
                 flash('Sorry, this todo has been marked as complete.', category='error')
+            elif todo_item.expired:
+                flash('Sorry, this todo has expired.', category='error')
             else:
                 todo_item.is_complete = True
                 session.commit()
