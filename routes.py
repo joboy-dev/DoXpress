@@ -6,11 +6,16 @@ class HomeView(View):
     '''Home page view'''
     
     def dispatch_request(self):
-        high_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='High').order_by(Todo.completion_date).all()
-        medium_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Medium').order_by(Todo.completion_date).all()
-        low_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Low').order_by(Todo.completion_date).all()
+        if current_user.is_authenticated:
+            high_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='High').order_by(Todo.completion_date).all()
+            medium_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Medium').order_by(Todo.completion_date).all()
+            low_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Low').order_by(Todo.completion_date).all()
         
-        return render_template('index.html', year=year, active_link='home', user=current_user, high_priority_todos=high_priority_todos, medium_priority_todos=medium_priority_todos, low_priority_todos=low_priority_todos)
+            return render_template('index.html', year=year, active_link='home', user=current_user, high_priority_todos=high_priority_todos, medium_priority_todos=medium_priority_todos, low_priority_todos=low_priority_todos)
+        
+        else:
+            return render_template('index.html', year=year, active_link='home', user=current_user)
+            
 
 app.add_url_rule('/', view_func=HomeView.as_view(name='home'))
 
@@ -173,7 +178,7 @@ class EditTodoView(View):
             
             return render_template('forms/edit-todo.html', active_link='edit_todo', user=current_user, form=form, todo=todo_item)
 
-app.add_url_rule('/edit-todo/<int:id>', view_func=EditTodoView.as_view(name='edit_todo'))
+app.add_url_rule('/edit/<int:id>', view_func=EditTodoView.as_view(name='edit_todo'))
 
 
 class ChangeCompletedStatus(View):
