@@ -9,12 +9,43 @@
 
         {{ form.todo_name.label }}
         {{ form.todo_name }}
+        {% with todo_name_errors = form.errors['todo_name'] %}
+            {% if todo_name_errors %}
+                {% for error in todo_name_errors %}
+                <p class="field_error">{{ error }}</p>
+                {% endfor %}
+            {% endif%}
+        {% endwith%}
 
         {{ form.priority.label }}
         {{ form.priority }}
+        {% with priority_errors = form.errors['priority'] %}
+            {% if priority_errors %}
+                {% for error in priority_errors %}
+                <p class="field_error">{{ error }}</p>
+                {% endfor %}
+            {% endif%}
+        {% endwith%}
 
-        {{ form.completion_datetime.label }}
-        {{ form.completion_datetime }}
+        {{ form.completion_date.label }}
+        {{ form.completion_date }}
+        {% with completion_date_errors = form.errors['completion_date'] %}
+            {% if completion_date_errors %}
+                {% for error in completion_date_errors %}
+                <p class="field_error">{{ error }}</p>
+                {% endfor %}
+            {% endif%}
+        {% endwith%}
+
+        {{ form.completion_time.label }}
+        {{ form.completion_time }}
+        {% with completion_time_errors = form.errors['completion_time'] %}
+            {% if completion_time_errors %}
+                {% for error in completion_time_errors %}
+                <p class="field_error">{{ error }}</p>
+                {% endfor %}
+            {% endif%}
+        {% endwith%}
 
         <input type="submit" value="Edit Todo">
     </form>

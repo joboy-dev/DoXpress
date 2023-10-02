@@ -6,7 +6,11 @@ class HomeView(View):
     '''Home page view'''
     
     def dispatch_request(self):
-        return render_template('index.html', year=year, active_link='home', user=current_user)
+        high_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='High').order_by(Todo.completion_date).all()
+        medium_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Medium').order_by(Todo.completion_date).all()
+        low_priority_todos = session.query(Todo).filter_by(owner_id=current_user.id, priority='Low').order_by(Todo.completion_date).all()
+        
+        return render_template('index.html', year=year, active_link='home', user=current_user, high_priority_todos=high_priority_todos, medium_priority_todos=medium_priority_todos, low_priority_todos=low_priority_todos)
 
 app.add_url_rule('/', view_func=HomeView.as_view(name='home'))
 
@@ -106,31 +110,40 @@ class AddTodoView(View):
     
     def dispatch_request(self):
         form = AddTodoForm(request.form)
-        
+                
         if form.validate_on_submit():
             todo_name = form.todo_name.data
             priority = form.priority.data
-            completion_date = form.completion_date.data.strftime('%d-%m-%Y')
-            completion_time = form.completion_time.data.strftime('%H:%M')
+            completion_date = form.completion_date.data
+            completion_time = form.completion_time.data
             
-            # create todo object
-            todo = Todo(
-                todo_name=todo_name,
-                priority=priority,
-                completion_date=completion_date,
-                completion_time=completion_time, 
-                owner_id = current_user.id
-            )
+            datetime_str = f'{completion_date} {completion_time}'
             
-            session.add(todo)
-            session.commit()
+            input_datetime = datetime.strptime(datetime_str, '%Y-%m-%d %H:%M:%S')
+            current_datetime = datetime.now()
             
-            flash('Todo created successfully', category='success')
-            return redirect(url_for('home'))
+            # check against backdating and time errors
+            if input_datetime < current_datetime:
+                flash('The date and/or time are backdated.', category='error')
+            else:
+                # create todo object
+                todo = Todo(
+                    todo_name=todo_name,
+                    priority=priority,
+                    completion_date=completion_date,
+                    completion_time=completion_time, 
+                    owner_id = current_user.id
+                )
+                
+                session.add(todo)
+                session.commit()
+                
+                flash('Todo created successfully', category='success')
+                return redirect(url_for('home'))
         
         return render_template('forms/add-todo.html', active_link='add_todo', user=current_user, form=form)
 
-app.add_url_rule('/todo/add', view_func=AddTodoView.as_view(name='add_todo'))
+app.add_url_rule('/add-todo', view_func=AddTodoView.as_view(name='add_todo'))
 
 
 class EditTodoView(View):
@@ -142,21 +155,25 @@ class EditTodoView(View):
     def dispatch_request(self, id):
         todo_item = db.get_or_404(Todo, ident=id)
         
-        form = EditTodoForm(obj=todo_item)
-        
-        if form.validate_on_submit():
-            form.populate_obj(obj=todo_item)
+        if todo_item.is_complete:
+            flash('Sorry, you cannot edit a completed todo.', category='error')
+            return redirect(url_for('home'))
             
-            if todo_item.owner_id == current_user.id:
-                session.commit()
-                flash('Todo updated.', category='success')
-                return redirect(url_for('home'))
-            else:
-                return abort(code=401)
+        else:
+            form = EditTodoForm(obj=todo_item)
+            if form.validate_on_submit():
+                form.populate_obj(obj=todo_item)
+                
+                if todo_item.owner_id == current_user.id:
+                    session.commit()
+                    flash('Todo updated.', category='success')
+                    return redirect(url_for('home'))
+                else:
+                    return abort(code=401)
             
-        return render_template('forms/edit-todo.html', active_link='edit_todo', user=current_user, form=form)
+            return render_template('forms/edit-todo.html', active_link='edit_todo', user=current_user, form=form, todo=todo_item)
 
-app.add_url_rule('/todo/<int:id>/edit', view_func=EditTodoView.as_view(name='edit_todo'))
+app.add_url_rule('/edit-todo/<int:id>', view_func=EditTodoView.as_view(name='edit_todo'))
 
 
 class ChangeCompletedStatus(View):
@@ -170,7 +187,7 @@ class ChangeCompletedStatus(View):
         if todo_item.owner_id == current_user.id:
         
             if todo_item.is_complete:
-                flash('Sorry, his todo has been marked as complete.', category='error')
+                flash('Sorry, this todo has been marked as complete.', category='error')
             else:
                 todo_item.is_complete = True
                 session.commit()
@@ -180,7 +197,7 @@ class ChangeCompletedStatus(View):
         else:
             return abort(code=401)
         
-app.add_url_rule('/todo/<int:id>/complete', view_func=ChangeCompletedStatus.as_view(name='complete_todo'))
+app.add_url_rule('/complete-todo/<int:id>', view_func=ChangeCompletedStatus.as_view(name='complete_todo'))
 
 
 class DeleteTodoView(View):
@@ -200,7 +217,7 @@ class DeleteTodoView(View):
         else:
             return abort(code=401)
 
-app.add_url_rule('/todo/<int:id>/delete', view_func=DeleteTodoView.as_view(name='delete_todo'))
+app.add_url_rule('/delete-todo/<int:id>', view_func=DeleteTodoView.as_view(name='delete_todo'))
 
 
 # Run app

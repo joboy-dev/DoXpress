@@ -27,6 +27,13 @@
     overflow: hidden;
 }
 
+.no-todos {
+    font-size: 0.55rem;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 25%;
+}
+
 .todos {
     height: 85%;
     display: flex;
@@ -48,7 +55,7 @@
 }
 
 .todos .priority .todo-items .completed {
-    background-color: rgba(134, 134, 134, 0.5);
+    background-color: rgba(172, 172, 172, 0.5);
     border: 1px solid rgb(77, 77, 77);
 }
 
@@ -103,10 +110,11 @@
 .todo-item .actions a {
     text-decoration: none;
     font-size: 0.5rem;
+    font-weight: 700;
 }
 
 .edit {
-    color: rgb(85, 90, 19);
+    color: rgb(138, 146, 19);
 }
 
 .delete {
@@ -117,9 +125,13 @@
     color: rgb(49, 179, 81);
 }
 
+.grayed-out {
+    color: rgb(99, 99, 99);
+}
+
 .edit:hover, .delete:hover, .complete:hover {
-    font-weight: 700;
-    scale: 1.02;
+    font-weight: 900;
+    scale: 1.05;
 }
 
 

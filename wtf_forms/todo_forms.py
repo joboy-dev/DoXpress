@@ -5,9 +5,9 @@ class AddTodoForm(FlaskForm):
     '''Form to add a new todo item'''
     
     priorities = [
-        ('L', 'Low'),
-        ('M', 'Medium'),
-        ('H', 'High')
+        ('Low', 'Low'),
+        ('Medium', 'Medium'),
+        ('High', 'High')
     ]
     
     todo_name = fields.StringField(
@@ -27,13 +27,13 @@ class AddTodoForm(FlaskForm):
     completion_date = fields.DateField(
         label='Date of Completion',
         validators=[validators.DataRequired()],
-        format='%d-%m-%Y'
+        # format='%d-%m-%Y'
     )
     
     completion_time = fields.TimeField(
         label='Time of Completion',
         validators=[validators.DataRequired()],
-        format='%H:%M'
+        # format='%H:%M'
     )
     
 
@@ -41,9 +41,9 @@ class EditTodoForm(FlaskForm):
     '''Form to edit a todo item'''
     
     priorities = [
-        ('L', 'Low'),
-        ('M', 'Medium'),
-        ('H', 'High')
+        ('Low', 'Low'),
+        ('Medium', 'Medium'),
+        ('High', 'High')
     ]
     
     todo_name = fields.StringField(
@@ -60,9 +60,15 @@ class EditTodoForm(FlaskForm):
         choices=priorities
     )
     
-    completion_datetime = fields.DateTimeField(
-        label='Date and Time of Completion',
+    completion_date = fields.DateField(
+        label='Date of Completion',
         validators=[validators.DataRequired()],
-        format='%d-%m-%Y || %H:%M'
+        # format='%d-%m-%Y'
+    )
+    
+    completion_time = fields.TimeField(
+        label='Time of Completion',
+        validators=[validators.DataRequired()],
+        # format='%H:%M'
     )
     

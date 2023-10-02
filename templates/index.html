@@ -15,51 +15,87 @@
 
             <div class="todos">
                 <div class="high priority">
-                    <h2>High Priority</h2>
+                    <h2>High Priority - {{ high_priority_todos|list|length }}</h2>
 
-                    <div class="todo-items">
-                        <div class="todo-item">
-                            <p class="todo-name">Todo Name</p>
-                            <p class="due-date">Due Date</p>
-                            <div class="actions">
-                                <a href="#" class="edit">Edit</a>
-                                <a href="#" class="delete">Delete</a>
-                                <a href="#" class="complete">Complete</a>
-                            </div>
+                    {% if high_priority_todos %}
+                        <div class="todo-items">
+                            {% for todo in high_priority_todos %}
+                                <div class="todo-item {% if todo.is_complete %}completed{% endif %}">
+                                    <p class="todo-name">{{ todo.todo_name }}</p>
+                                    <p class="due-date">Due {{ todo.completion_date.strftime('%d-%m-%Y') }} || {{ todo.completion_time.strftime('%H:%M') }}</p>
+                                    <div class="actions">
+                                        {% if not todo.is_complete %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="edit">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="complete">Complete</a>
+                                        {% else %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="grayed-out">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="grayed-out">Completed</a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    </div>
+                    {% else %}
+                        <p class="no-todos">You have no todos available in this category.</p>
+                    {% endif %}
                 </div>
 
                 <div class="medium priority">
-                    <h2>Medium Priority</h2>
+                    <h2>Medium Priority - {{ medium_priority_todos|list|length }}</h2>
 
-                    <div class="todo-items">
-                        <div class="todo-item">
-                            <p class="todo-name">Todo Name</p>
-                            <p class="due-date">Due Date</p>
-                            <div class="actions">
-                                <a href="#" class="edit">Edit</a>
-                                <a href="#" class="delete">Delete</a>
-                                <a href="#" class="complete">Complete</a>
-                            </div>
+                    {% if medium_priority_todos %}
+                        <div class="todo-items">
+                            {% for todo in medium_priority_todos %}
+                                <div class="todo-item {% if todo.is_complete %}completed{% endif %}">
+                                    <p class="todo-name">{{ todo.todo_name }}</p>
+                                    <p class="due-date">Due {{ todo.completion_date.strftime('%d-%m-%Y') }} || {{ todo.completion_time.strftime('%H:%M') }}</p>
+                                    <div class="actions">
+                                        {% if not todo.is_complete %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="edit">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="complete">Complete</a>
+                                        {% else %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="grayed-out">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="grayed-out">Completed</a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    </div>
+                    {% else %}
+                        <p class="no-todos">You have no todos available in this category.</p>
+                    {% endif %}
                 </div>
 
                 <div class="low priority">
-                    <h2>Low Priority</h2>
+                    <h2>Low Priority - {{ low_priority_todos|list|length }}</h2>
 
-                    <div class="todo-items">
-                        <div class="todo-item">
-                            <p class="todo-name">Todo Nameeeeee eeeee eeeee eeee</p>
-                            <p class="due-date">Due Date</p>
-                            <div class="actions">
-                                <a href="#" class="edit">Edit</a>
-                                <a href="#" class="delete">Delete</a>
-                                <a href="#" class="complete">Complete</a>
-                            </div>
+                    {% if low_priority_todos %}
+                        <div class="todo-items">
+                            {% for todo in low_priority_todos %}
+                                <div class="todo-item {% if todo.is_complete %}completed{% endif %}">
+                                    <p class="todo-name">{{ todo.todo_name }}</p>
+                                    <p class="due-date">Due {{ todo.completion_date.strftime('%d-%m-%Y') }} || {{ todo.completion_time.strftime('%H:%M') }}</p>
+                                    <div class="actions">
+                                        {% if not todo.is_complete %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="edit">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="complete">Complete</a>
+                                        {% else %}
+                                            <a href="{{ url_for('edit_todo', id=todo.id) }}" class="grayed-out">Edit</a>
+                                            <a href="{{ url_for('delete_todo', id=todo.id) }}" class="delete">Delete</a>
+                                            <a href="{{ url_for('complete_todo', id=todo.id) }}" class="grayed-out">Completed</a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
-                    </div>
+                    {% else %}
+                        <p class="no-todos">You have no todos available in this category.</p>
+                    {% endif %}
                 </div>
                 
             </div>

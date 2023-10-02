@@ -25,8 +25,8 @@ class Todo(db.Model):
     id = sa.Column(sa.Integer, primary_key=True, nullable=False)
     todo_name = sa.Column(sa.String, nullable=False)
     priority = sa.Column(sa.String, nullable=False)
-    completion_date = sa.Column(sa.String, nullable=False)
-    completion_time = sa.Column(sa.String, nullable=False)
+    completion_date = sa.Column(sa.Date, nullable=False)
+    completion_time = sa.Column(sa.Time, nullable=False)
     is_complete = sa.Column(sa.Boolean, nullable=True, default=False)
     
     owner_id = sa.Column(sa.Integer, sa.ForeignKey(column='user.id', ondelete='CASCADE'), nullable=False)
